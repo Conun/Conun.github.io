@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="c++11 std::move std::forward rvalue-reference,">
 
 
 
@@ -94,13 +94,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="Outline [TOC] Rvalue reference/std::move/std::forwardOverviewstd::move doesn’t move anything, and not always cheaper than copying, and perfect forwarding is imperfect. RelationsRvalue references are t">
+<meta name="keywords" content="c++11 std::move std::forward rvalue-reference">
+<meta property="og:type" content="article">
+<meta property="og:title" content="about c++11 std::move std::forward">
+<meta property="og:url" content="http://yoursite.com/2018/11/29/about-c-11-std-move-std-forward/index.html">
 <meta property="og:site_name" content="Blog">
+<meta property="og:description" content="Outline [TOC] Rvalue reference/std::move/std::forwardOverviewstd::move doesn’t move anything, and not always cheaper than copying, and perfect forwarding is imperfect. RelationsRvalue references are t">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-11-29T14:41:44.750Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog">
+<meta name="twitter:title" content="about c++11 std::move std::forward">
+<meta name="twitter:description" content="Outline [TOC] Rvalue reference/std::move/std::forwardOverviewstd::move doesn’t move anything, and not always cheaper than copying, and perfect forwarding is imperfect. RelationsRvalue references are t">
 
 
 
@@ -129,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2018/11/29/about-c-11-std-move-std-forward/">
 
 
 
 
 
-  <title>Blog</title>
+  <title>about c++11 std::move std::forward | Blog</title>
   
 
 
@@ -160,9 +165,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -265,9 +268,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -297,9 +300,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/29/about-c-11-std-move-std-forward/" itemprop="url">about c++11 std::move std::forward</a></h1>
+          <h1 class="post-title" itemprop="name headline">about c++11 std::move std::forward</h1>
         
 
         <div class="post-meta">
@@ -359,9 +360,7 @@
       
 
       
-        
-          
-            <p><em>Outline</em></p>
+        <p><em>Outline</em></p>
 <p>[TOC]</p>
 <h1 id="Rvalue-reference-std-move-std-forward"><a href="#Rvalue-reference-std-move-std-forward" class="headerlink" title="Rvalue reference/std::move/std::forward"></a>Rvalue reference/std::move/std::forward</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>std::move doesn’t move anything, and not always cheaper than copying, and perfect forwarding is imperfect.</p>
 <h2 id="Relations"><a href="#Relations" class="headerlink" title="Relations"></a>Relations</h2><p>Rvalue references are the <strong>glue</strong> that ties std::move and std::forward.</p>
@@ -420,8 +419,6 @@
 <p>1&gt; <code>rvalue</code> reference should be unconditionally cast to <code>rvalues</code> (via std::move)<br>2&gt; <code>rvalue</code> reference should be conditionally cast to <code>rvalues</code> (via std::forward)   // be aware the situation when using either way.</p>
 </blockquote>
 
-          
-        
       
     </div>
     
@@ -436,14 +433,20 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/c-11-std-move-std-forward-rvalue-reference/" rel="tag"># c++11 std::move std::forward rvalue-reference</a>
+          
+        </div>
+      
+
+      
+      
+      
 
       
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -453,10 +456,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -464,6 +468,13 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/11/29/about-c-11-std-move-std-forward/" data-title="about c++11 std::move std::forward" data-url="http://yoursite.com/2018/11/29/about-c-11-std-move-std-forward/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -484,8 +495,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Conun">
           <p class="site-author-name" itemprop="name">Conun</p>
@@ -536,6 +556,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Rvalue-reference-std-move-std-forward"><span class="nav-number">1.</span> <span class="nav-text">Rvalue reference/std::move/std::forward</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview"><span class="nav-number">1.1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Relations"><span class="nav-number">1.2.</span> <span class="nav-text">Relations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rvalue-or-lvalue-references"><span class="nav-number">1.3.</span> <span class="nav-text">rvalue or lvalue references</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#std-move-and-std-forward"><span class="nav-number">1.4.</span> <span class="nav-text">std::move and std::forward</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#std-move"><span class="nav-number">1.4.1.</span> <span class="nav-text">std::move</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#std-forward"><span class="nav-number">1.4.2.</span> <span class="nav-text">std::forward</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reference-collapsing"><span class="nav-number">1.4.3.</span> <span class="nav-text">reference collapsing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#universal-references"><span class="nav-number">1.4.4.</span> <span class="nav-text">universal references</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Some-tips"><span class="nav-number">1.5.</span> <span class="nav-text">Some tips</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -649,10 +685,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-  
+
 
   
 
