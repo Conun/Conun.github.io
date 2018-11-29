@@ -249,9 +249,47 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
   
 </nav>
 
@@ -361,66 +399,16 @@
       
         
           
-            <p><em>Outline</em></p>
-<p>[TOC]</p>
-<h1 id="Rvalue-reference-std-move-std-forward"><a href="#Rvalue-reference-std-move-std-forward" class="headerlink" title="Rvalue reference/std::move/std::forward"></a>Rvalue reference/std::move/std::forward</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>std::move doesn’t move anything, and not always cheaper than copying, and perfect forwarding is imperfect.</p>
-<h2 id="Relations"><a href="#Relations" class="headerlink" title="Relations"></a>Relations</h2><p>Rvalue references are the <strong>glue</strong> that ties std::move and std::forward.</p>
-<h2 id="rvalue-or-lvalue-references"><a href="#rvalue-or-lvalue-references" class="headerlink" title="rvalue or lvalue references"></a>rvalue or lvalue references</h2><p><em>Rule</em>: whether an expression is an lvalue is to ask if you can take its address; If you can, then it typically is</p>
-<h2 id="std-move-and-std-forward"><a href="#std-move-and-std-forward" class="headerlink" title="std::move and std::forward"></a>std::move and std::forward</h2><p>std::move and std::forwarding are merely functions</p>
-<ul>
-<li>std::move unconditionally casts its argument to an rvalue</li>
-<li>std::forwarding does this cast only if <em>a particular condition</em> is fulfilled</li>
-</ul>
-<h3 id="std-move"><a href="#std-move" class="headerlink" title="std::move"></a>std::move</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">typename</span> remove_reference&lt;T&gt;::type&amp;&amp;</span><br><span class="line">move(T&amp;&amp; param)  <span class="comment">// c++11 version</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">using</span> ReturnType = <span class="keyword">typename</span> remove_reference&lt;T&gt;::type&amp;&amp;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;ReturnType&gt;(param);    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">decltype</span>(<span class="keyword">auto</span>) move(T&amp;&amp; param)  <span class="comment">// c++14 version</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">using</span> ReturnType = <span class="keyword">remove_reference_t</span>&lt;T&gt;::type&amp;&amp;;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;ReturnType&gt;(param);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>Notice</strong>: </p>
-<ul>
-<li>these visions are close to standard, not exactly all the details</li>
-<li>we can just call <code>std::move</code> as <code>&quot;std::rvalue_cast&quot;</code>( <strong>It does cast; It does not move</strong>)</li>
-</ul>
-<h3 id="std-forward"><a href="#std-forward" class="headerlink" title="std::forward"></a>std::forward</h3><p>It casts to an <code>rvalue</code> only if its argument was initialized with an <code>rvalue</code>.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function">T&amp;&amp; <span class="title">forward</span><span class="params">(<span class="keyword">remove_reference_t</span>&lt;T&gt;&amp; param)</span> <span class="comment">// c++14 version</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;T&amp;&amp;&gt;(param);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>Explanation</strong>:</p>
-<ul>
-<li><em>reference collapse rule</em>: If either reference is an <code>lvalue</code> reference, the result is an <code>lvalue</code> reference. Otherwise the result is an <code>rvalue</code> reference.</li>
-<li>so, considering with reference collapse rule, when an <code>lvalue</code> passed through, then T&amp; &amp;&amp;  ==&gt; T&amp; returned. Likewise, when an <code>rvalue</code> passed through, T&amp;&amp; returned. This is why perfect forward.</li>
-</ul>
-<h3 id="reference-collapsing"><a href="#reference-collapsing" class="headerlink" title="reference collapsing"></a>reference collapsing</h3><p>We are forbidden from declaring references to references, but compilers may produce them in particular contexts, template instantiation being among them.</p>
-<blockquote>
-<p><strong>Rule</strong>: If either reference is an <code>lvalue</code> reference, the result is an <code>lvalue</code> reference. Otherwise the result is an <code>rvalue</code> reference.</p>
-</blockquote>
-<h3 id="universal-references"><a href="#universal-references" class="headerlink" title="universal references"></a>universal references</h3><blockquote>
-<p>1&gt; Type deduction distinguishes lvalues from rvalues.<br>2&gt; Reference collapsing.</p>
-</blockquote>
-<h2 id="Some-tips"><a href="#Some-tips" class="headerlink" title="Some tips"></a>Some tips</h2><p>1 <strong>Moving a value out of an object generally modifies the object(The Intention)</strong>. So the language should not permit <code>const</code> object to be passed to functions (such as <code>move constructor</code>) that could modify them.</p>
-<p><strong>Advice</strong>:</p>
-<blockquote>
-<p>Don’t declare objects <code>const</code> if you want to be able to move from them. (Move requests on <code>const</code> objects are silently transformed into copy operations)</p>
-</blockquote>
-<p>2 <code>std::move</code> not only doesn’t actually move anything, it doesn’t even guarantee that the object it’s casting will be eligible to be moved.</p>
-<p>3 The price of moving is lower than coping but higher than <strong><code>RVO</code></strong>.  Moving does the following two things:</p>
-<blockquote>
-<p>1&gt; Steal all the data<br>2&gt; Trick the object we steal into forgetting everything</p>
-</blockquote>
-<p>4 universal references and <code>rvalue</code> references:</p>
-<ul>
-<li><p>T&amp;&amp; has two different meanings: </p>
-<blockquote>
-<p>1&gt; rvalue reference<br>2&gt; universal reference (could bind to <code>lvalue</code>, <code>rvalue</code>, <code>non-const</code> objects, volatile or non-volatile objects, …)</p>
-</blockquote>
-</li>
-<li><p>How to distinguish: </p>
-<blockquote>
-<p>1&gt; If a function template parameter has type T&amp;&amp; for a deduced type T, or if an object is declared using auto&amp;&amp;, the parameter or object is a universal reference.<br>2&gt; Universal references correspond to <code>rvalue</code> reference if they’re initialized with <code>rvalues</code>. They correspond to <code>lvalue</code> references if they’re initialized with <code>lvalues</code>.</p>
-</blockquote>
-</li>
-</ul>
-<p>5 Use std::move on <code>rvalue</code> references, std::forward on universal references:</p>
-<blockquote>
-<p>1&gt; <code>rvalue</code> reference should be unconditionally cast to <code>rvalues</code> (via std::move)<br>2&gt; <code>rvalue</code> reference should be conditionally cast to <code>rvalues</code> (via std::forward)   // be aware the situation when using either way.</p>
-</blockquote>
-
           
+Rvalue reference/std::move/std::forwardOverviewstd::move doesn’t move anything, and not always cheaper than copying, and perfect forwarding is imperf
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/29/about-c-11-std-move-std-forward/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -702,7 +690,337 @@
 
   
 
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
 
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.2"></script>
 
 
 
